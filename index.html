@@ -108,22 +108,28 @@
   </audio>
   
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const audio = document.getElementById('bgmusic');
-      const playPromise = audio.play();
+  document.addEventListener('DOMContentLoaded', function () {
+    const audio = document.getElementById('bgmusic');
+    
+    // Unmute jika sempat dimuted sebelumnya
+    audio.muted = false;
 
-      if (playPromise !== undefined) {
-        playPromise.then(_ => {
-          // Autoplay berhasil
-        }).catch(error => {
-          // Autoplay dicegah, mungkin karena kebijakan browser
-          console.log('Autoplay dicegah, mencoba untuk memulai ulang dengan interaksi pengguna.');
-          document.body.addEventListener('click', function() {
-            audio.play();
-          }, { once: true });
-        });
-      }
-    });
+    // Coba autoplay
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        // Autoplay berhasil
+        console.log('Autoplay berhasil');
+      }).catch(error => {
+        // Autoplay dicegah oleh browser
+        console.log('Autoplay dicegah, menunggu klik pengguna...');
+        document.body.addEventListener('click', function () {
+          audio.play();
+        }, { once: true });
+      });
+    }
+  });
   </script>
   
 </html>
